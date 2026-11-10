@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
   const whenLabel = format(local, "dd/MM/yyyy HH:mm");
 
   const description = [
-    `Cita Hirox — ${consultation.label}`,
+    `Cita WAR SQUAD — ${consultation.label}`,
     `Cliente: ${name.trim()}`,
     `Correo: ${email.trim()}`,
     phone ? `Teléfono: ${phone.trim()}` : null,
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
   if (connected) {
     try {
       const event = await createCalendarEvent({
-        summary: `Hirox · ${consultation.label} · ${name.trim()}`,
+        summary: `WAR SQUAD · ${consultation.label} · ${name.trim()}`,
         description,
         start: startDate,
         end: endDate,
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "No se pudo crear el evento en Google Calendar. Intenta de nuevo o contacta a Hirox.",
+            "No se pudo crear el evento en Google Calendar. Intenta de nuevo o contacta a WAR SQUAD.",
         },
         { status: 502 }
       );

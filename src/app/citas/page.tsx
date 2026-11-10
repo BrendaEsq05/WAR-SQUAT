@@ -4,7 +4,7 @@ import { BookingForm } from "@/components/booking/booking-form";
 export const metadata: Metadata = {
   title: "Agendar cita",
   description:
-    "Reserva valoración, seguimiento o entrenamiento con Hirox. Se liga a Google Calendar.",
+    "Reserva valoración, seguimiento o entrenamiento con WAR SQUAD. Se liga a Google Calendar.",
 };
 
 export default function CitasPage() {
@@ -16,7 +16,7 @@ export default function CitasPage() {
             Citas
           </p>
           <h1 className="mt-2 font-heading text-4xl font-bold tracking-tight text-moss-deep sm:text-5xl">
-            Agenda con Hirox
+            Agenda con WAR SQUAD
           </h1>
           <p className="mt-3 max-w-xl text-muted-foreground sm:text-lg">
             Elige tipo de sesión y horario. Si el calendario de Google está

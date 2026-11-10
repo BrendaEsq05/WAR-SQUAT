@@ -1,6 +1,6 @@
-# Hirox
+# WAR SQUAD
 
-Sitio web del nutriólogo y entrenador **Hirox**: método, casos (diabetes, hipotiroidismo, sobrepeso, estética, vesícula), comunidad y **agenda de citas** ligada a Google Calendar.
+Sitio web del nutriólogo y entrenador **WAR SQUAD**: método, casos (diabetes, hipotiroidismo, sobrepeso, estética, salud digestiva), comunidad y **agenda de citas** ligada a Google Calendar.
 
 ## Arranque local
 
@@ -18,9 +18,9 @@ Sin credenciales de Google la agenda corre en **modo demo** (horarios simulados;
 
 | Ruta | Qué es |
 |------|--------|
-| `/` | Landing Hirox |
+| `/` | Landing WAR SQUAD |
 | `/citas` | Agendar valoración, seguimiento o entrenamiento |
-| `/admin/calendario` | Conectar la cuenta de Google de Hirox |
+| `/admin/calendario` | Conectar la cuenta de Google de WAR SQUAD |
 
 ## Google Calendar
 
@@ -29,7 +29,7 @@ Sin credenciales de Google la agenda corre en **modo demo** (horarios simulados;
 3. Credenciales **OAuth 2.0** (aplicación web).
 4. Redirect URI: `http://localhost:4317/api/calendar/callback` (y el de producción cuando exista).
 5. Copia Client ID y Secret a `.env.local` (ver `.env.example`).
-6. En `/admin/calendario` usa `ADMIN_SECRET` y pulsa **Conectar Google Calendar** con la cuenta de Hirox.
+6. En `/admin/calendario` usa `ADMIN_SECRET` y pulsa **Conectar Google Calendar** con la cuenta de WAR SQUAD.
 
 Cuando está conectado:
 

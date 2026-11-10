@@ -40,7 +40,7 @@ export function AdminCalendarioClient() {
         Google Calendar
       </h1>
       <p className="mt-3 text-muted-foreground">
-        Conecta la cuenta de Google de Hirox para que las citas de la app se
+        Conecta la cuenta de Google de WAR SQUAD para que las citas de la app se
         creen automáticamente en su calendario.
       </p>
 

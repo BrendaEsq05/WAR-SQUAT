@@ -8,16 +8,25 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "/#metodo", label: "Método" },
-  { href: "/#casos", label: "Casos" },
-  { href: "/#comunidad", label: "Comunidad" },
-  { href: "/citas", label: "Citas" },
+  { href: "/perfil", label: "Perfil" },
+  { href: "/casos", label: "Casos" },
+  { href: "/comunidad", label: "Comunidad" },
+  { href: "/hyrox", label: "HYROX" },
+  { href: "/testimonios", label: "Testimonios" },
+  { href: "/contacto", label: "Contacto" },
 ];
 
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const onDark = pathname === "/";
+  const onDark =
+    pathname === "/" ||
+    pathname === "/perfil" ||
+    pathname === "/hyrox" ||
+    pathname === "/contacto" ||
+    pathname === "/comunidad" ||
+    pathname === "/testimonios" ||
+    pathname.startsWith("/condiciones");
 
   return (
     <header
@@ -31,9 +40,9 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link
           href="/"
-          className="font-heading text-2xl font-bold tracking-tight uppercase"
+          className="font-heading text-lg font-bold tracking-tight uppercase sm:text-2xl"
         >
-          Hirox
+          WAR SQUAD
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
