@@ -24,12 +24,10 @@ Sin credenciales de Google la agenda corre en **modo demo** (horarios simulados;
 
 ## Google Calendar
 
-1. Proyecto en [Google Cloud Console](https://console.cloud.google.com).
-2. Activa **Google Calendar API**.
-3. Credenciales **OAuth 2.0** (aplicación web).
-4. Redirect URI: `http://localhost:4317/api/calendar/callback` (y el de producción cuando exista).
-5. Copia Client ID y Secret a `.env.local` (ver `.env.example`).
-6. En `/admin/calendario` usa `ADMIN_SECRET` y pulsa **Conectar Google Calendar** con la cuenta de WAR SQUAD.
+
+1. Redirect URI: `http://localhost:4317/api/calendar/callback` (y el de producción cuando exista).
+2. Copia Client ID y Secret a `.env.local` (ver `.env.example`).
+3. En `/admin/calendario` usa `ADMIN_SECRET` y pulsa **Conectar Google Calendar** con la cuenta de WAR SQUAD.
 
 Cuando está conectado:
 
