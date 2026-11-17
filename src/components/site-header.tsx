@@ -12,7 +12,6 @@ const links = [
   { href: "/casos", label: "Casos" },
   { href: "/comunidad", label: "Comunidad" },
   { href: "/hyrox", label: "HYROX" },
-  { href: "/testimonios", label: "Testimonios" },
   { href: "/contacto", label: "Contacto" },
 ];
 
