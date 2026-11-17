@@ -17,7 +17,7 @@ export const faqs = [
   {
     question: "¿Qué días y horarios hay para consulta?",
     answer:
-      "De lunes a viernes de 11:00 am a 3:00 pm (con bloques de media hora) y sábado de 9:00 am a 1:00 pm. Los horarios se van ocupando conforme se agendan. Confírmanos el tuyo por WhatsApp o desde Contacto.",
+      "Solo viernes de 11:00 am a 3:00 pm y sábado de 9:00 am a 1:00 pm. Los horarios se van ocupando conforme se agendan. Confírmanos el tuyo por WhatsApp o desde Agendar cita.",
   },
   {
     question: "¿Cómo debo llegar a la cita para las mediciones?",

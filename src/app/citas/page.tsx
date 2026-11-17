@@ -19,8 +19,8 @@ export default function CitasPage() {
             Agenda con WAR SQUAD
           </h1>
           <p className="mt-3 max-w-xl text-muted-foreground sm:text-lg">
-            Elige tipo de sesión y horario. Al final confirmas por WhatsApp para
-            que te apartemos el lugar.
+            Solo viernes (11:00 am – 3:00 pm) y sábado (9:00 am – 1:00 pm). Al
+            final confirmas por WhatsApp para que te apartemos el lugar.
           </p>
         </div>
       </div>

@@ -25,26 +25,9 @@ const razones = [
   "Mantenerte en el camino correcto",
 ];
 
-const lunesAViernes = [
-  "11:00 am",
-  "11:30 am",
-  "12:00 pm",
-  "12:30 pm",
-  "1:00 pm",
-  "1:30 pm",
-  "2:00 pm",
-  "3:00 pm",
-];
+const viernes = ["11:00 am", "12:00 pm", "1:00 pm", "2:00 pm"];
 
-const sabado = [
-  "9:00 am",
-  "9:30 am",
-  "11:00 am",
-  "11:30 am",
-  "12:00 pm",
-  "12:30 pm",
-  "1:00 pm",
-];
+const sabado = ["9:00 am", "10:00 am", "11:00 am", "12:00 pm"];
 
 const preparacion = [
   "Haber ingerido al menos 500 ml de agua",
@@ -116,10 +99,10 @@ export default function ContactoPage() {
           <div className="mt-10 grid gap-10 sm:grid-cols-2">
             <div>
               <h2 className="font-heading text-2xl font-bold text-moss-deep">
-                Lunes a viernes
+                Viernes · 11:00 am – 3:00 pm
               </h2>
               <ul className="mt-4 space-y-2">
-                {lunesAViernes.map((hora) => (
+                {viernes.map((hora) => (
                   <li
                     key={hora}
                     className="flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 text-moss-deep"
@@ -132,7 +115,7 @@ export default function ContactoPage() {
             </div>
             <div>
               <h2 className="font-heading text-2xl font-bold text-moss-deep">
-                Sábado
+                Sábado · 9:00 am – 1:00 pm
               </h2>
               <ul className="mt-4 space-y-2">
                 {sabado.map((hora) => (

@@ -11,7 +11,7 @@ import {
   BOOKING_TIMEZONE,
   SLOT_DURATION_MINUTES,
   WORK_DAYS,
-  WORK_HOURS,
+  WORK_HOURS_BY_DAY,
   isGoogleConfigured,
 } from "./config";
 import { getBusyIntervals, type BusyInterval } from "./google";
@@ -24,25 +24,26 @@ export type TimeSlot = {
 };
 
 function overlaps(aStart: Date, aEnd: Date, busy: BusyInterval[]): boolean {
-  return busy.some(
-    (b) => aStart < b.end && aEnd > b.start
-  );
+  return busy.some((b) => aStart < b.end && aEnd > b.start);
 }
 
-function buildDaySlots(dayLocal: Date, durationMinutes: number): TimeSlot[] {
+function buildDaySlots(
+  dayLocal: Date,
+  durationMinutes: number,
+  blocks: { start: number; end: number }[]
+): TimeSlot[] {
   const slots: TimeSlot[] = [];
   const y = dayLocal.getFullYear();
   const m = dayLocal.getMonth();
   const d = dayLocal.getDate();
 
-  for (const block of WORK_HOURS) {
+  for (const block of blocks) {
     for (let hour = block.start; hour < block.end; hour++) {
       for (let minute = 0; minute < 60; minute += durationMinutes) {
         if (hour === block.end - 1 && minute + durationMinutes > 60) break;
         const localStart = new Date(y, m, d, hour, minute, 0, 0);
         const localEnd = addMinutes(localStart, durationMinutes);
-        const endHour =
-          localEnd.getHours() + localEnd.getMinutes() / 60;
+        const endHour = localEnd.getHours() + localEnd.getMinutes() / 60;
         if (endHour > block.end + 0.001) continue;
 
         const startUtc = fromZonedTime(localStart, BOOKING_TIMEZONE);
@@ -70,7 +71,7 @@ export async function getAvailableSlots(options: {
   slots: TimeSlot[];
   message?: string;
 }> {
-  const daysAhead = options.daysAhead ?? 14;
+  const daysAhead = options.daysAhead ?? 28;
   const durationMinutes = options.durationMinutes ?? SLOT_DURATION_MINUTES;
   const now = new Date();
   const nowLocal = toZonedTime(now, BOOKING_TIMEZONE);
@@ -82,8 +83,7 @@ export async function getAvailableSlots(options: {
   const rangeStart = startOfDay(startLocal);
   const rangeEnd = addDays(rangeStart, daysAhead);
 
-  const connected =
-    isGoogleConfigured() && (await isCalendarConnected());
+  const connected = isGoogleConfigured() && (await isCalendarConnected());
 
   let busy: BusyInterval[] = [];
   if (connected) {
@@ -94,13 +94,7 @@ export async function getAvailableSlots(options: {
       );
     } catch (err) {
       console.error("freeBusy error", err);
-      return {
-        mode: "mock",
-        timezone: BOOKING_TIMEZONE,
-        slots: [],
-        message:
-          "No se pudo consultar Google Calendar. Revisa la conexión en Admin.",
-      };
+      busy = [];
     }
   }
 
@@ -110,7 +104,8 @@ export async function getAvailableSlots(options: {
     const weekday = day.getDay(); // 0 Sun
     if (!WORK_DAYS.includes(weekday as (typeof WORK_DAYS)[number])) continue;
 
-    for (const slot of buildDaySlots(day, durationMinutes)) {
+    const blocks = WORK_HOURS_BY_DAY[weekday] || [];
+    for (const slot of buildDaySlots(day, durationMinutes, blocks)) {
       const start = new Date(slot.start);
       const end = new Date(slot.end);
       if (!isBefore(now, start)) continue;
@@ -123,8 +118,5 @@ export async function getAvailableSlots(options: {
     mode: connected ? "google" : "mock",
     timezone: BOOKING_TIMEZONE,
     slots,
-    message: connected
-      ? undefined
-      : "Modo demo: horarios simulados. Conecta Google Calendar en /admin/calendario para sincronizar citas reales.",
   };
 }

@@ -3,12 +3,17 @@ export const BOOKING_TIMEZONE =
 
 export const SLOT_DURATION_MINUTES = 60;
 
-/** Horario laboral local (24h) — lunes a sábado */
-export const WORK_DAYS = [1, 2, 3, 4, 5, 6] as const; // Mon–Sat
-export const WORK_HOURS = [
-  { start: 9, end: 13 },
-  { start: 16, end: 20 },
-] as const;
+/** Solo viernes y sábado (getDay: 5 = vie, 6 = sáb) */
+export const WORK_DAYS = [5, 6] as const;
+
+/** Horario local por día (fin exclusivo en horas) */
+export const WORK_HOURS_BY_DAY: Record<number, { start: number; end: number }[]> =
+  {
+    // Viernes 11:00–15:00
+    5: [{ start: 11, end: 15 }],
+    // Sábado 9:00–13:00
+    6: [{ start: 9, end: 13 }],
+  };
 
 export {
   CONSULTATION_TYPES,

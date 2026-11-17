@@ -258,7 +258,7 @@ export function BookingForm() {
           </div>
         ) : days.length === 0 ? (
           <p className="mt-4 text-sm text-muted-foreground">
-            No hay horarios libres en las próximas dos semanas. Escribe a WAR SQUAD
+            No hay horarios libres en las próximas semanas (viernes y sábado). Escribe a WAR SQUAD
             o vuelve más tarde.
           </p>
         ) : (
