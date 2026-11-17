@@ -1,8 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { connection, NextRequest, NextResponse } from "next/server";
 import { isGoogleConfigured } from "@/lib/calendar/config";
 import { getAuthUrl } from "@/lib/calendar/google";
 
 export async function GET(request: NextRequest) {
+  await connection();
+
   if (!isGoogleConfigured()) {
     return NextResponse.json(
       {

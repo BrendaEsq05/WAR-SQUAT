@@ -17,7 +17,33 @@ async function ensureDataDir() {
   await fs.mkdir(path.dirname(TOKEN_PATH), { recursive: true });
 }
 
+function tokensFromEnv(): GoogleTokens | null {
+  const raw = process.env.GOOGLE_TOKENS_JSON?.trim();
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw) as GoogleTokens;
+      if (parsed.refresh_token || parsed.access_token) return parsed;
+    } catch {
+      // ignore invalid JSON
+    }
+  }
+
+  const refresh = process.env.GOOGLE_REFRESH_TOKEN?.trim();
+  if (refresh) {
+    return {
+      refresh_token: refresh,
+      email: process.env.GOOGLE_CALENDAR_EMAIL || undefined,
+      connectedAt: process.env.GOOGLE_CONNECTED_AT || undefined,
+    };
+  }
+
+  return null;
+}
+
 export async function readTokens(): Promise<GoogleTokens | null> {
+  const fromEnv = tokensFromEnv();
+  if (fromEnv) return fromEnv;
+
   try {
     const raw = await fs.readFile(TOKEN_PATH, "utf8");
     return JSON.parse(raw) as GoogleTokens;
@@ -27,8 +53,13 @@ export async function readTokens(): Promise<GoogleTokens | null> {
 }
 
 export async function writeTokens(tokens: GoogleTokens): Promise<void> {
-  await ensureDataDir();
-  await fs.writeFile(TOKEN_PATH, JSON.stringify(tokens, null, 2), "utf8");
+  try {
+    await ensureDataDir();
+    await fs.writeFile(TOKEN_PATH, JSON.stringify(tokens, null, 2), "utf8");
+  } catch (err) {
+    // On Vercel the filesystem is ephemeral/read-only — env vars are the source of truth.
+    console.warn("No se pudieron guardar tokens en disco:", err);
+  }
 }
 
 export async function clearTokens(): Promise<void> {

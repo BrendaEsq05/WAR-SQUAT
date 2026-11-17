@@ -106,9 +106,12 @@ export function AdminCalendarioClient() {
           </Button>
           {!status?.configured && (
             <p className="text-xs text-muted-foreground">
-              Copia <code className="rounded bg-muted px-1">.env.example</code> a{" "}
-              <code className="rounded bg-muted px-1">.env.local</code>, llena
-              Client ID/Secret de Google Cloud y reinicia el servidor.
+              En Vercel → Project → Settings → Environment Variables agrega{" "}
+              <code className="rounded bg-muted px-1">GOOGLE_CLIENT_ID</code>,{" "}
+              <code className="rounded bg-muted px-1">GOOGLE_CLIENT_SECRET</code>,{" "}
+              <code className="rounded bg-muted px-1">NEXT_PUBLIC_APP_URL</code> y{" "}
+              <code className="rounded bg-muted px-1">ADMIN_SECRET</code>. Luego
+              redespliega.
             </p>
           )}
         </div>
@@ -118,10 +121,17 @@ export function AdminCalendarioClient() {
         <li>Crea un proyecto en Google Cloud Console.</li>
         <li>Activa la API de Google Calendar.</li>
         <li>
-          Crea OAuth 2.0 (app web) y agrega el redirect URI de{" "}
-          <code className="rounded bg-muted px-1">.env.example</code>.
+          Crea OAuth 2.0 (app web) y agrega redirect URI:{" "}
+          <code className="rounded bg-muted px-1">
+            https://warsquad.vercel.app/api/calendar/callback
+          </code>
         </li>
-        <li>Pega Client ID y Secret en .env.local y conecta aquí.</li>
+        <li>
+          Pega Client ID/Secret en Vercel, conecta aquí con la cuenta de WAR
+          SQUAD y, si hace falta, guarda{" "}
+          <code className="rounded bg-muted px-1">GOOGLE_REFRESH_TOKEN</code> en
+          Vercel para que no se pierda al redesplegar.
+        </li>
       </ol>
     </div>
   );

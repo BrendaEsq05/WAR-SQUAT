@@ -22,11 +22,12 @@ export function isGoogleConfigured(): boolean {
 }
 
 export function getAppUrl(): string {
-  return (
+  const raw =
     process.env.NEXT_PUBLIC_APP_URL ||
     process.env.VERCEL_URL ||
-    "http://localhost:4317"
-  ).replace(/\/$/, "");
+    "http://localhost:4317";
+  const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+  return withProtocol.replace(/\/$/, "");
 }
 
 export function getRedirectUri(): string {

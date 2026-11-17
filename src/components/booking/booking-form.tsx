@@ -132,7 +132,17 @@ export function BookingForm() {
             notes,
           }),
         });
-        const data = (await res.json()) as BookResponse;
+        let data: BookResponse = {};
+        try {
+          data = (await res.json()) as BookResponse;
+        } catch {
+          setError(
+            res.ok
+              ? "La cita se envió, pero la respuesta no se pudo leer."
+              : "El servidor no pudo agendar. Revisa la conexión de Google Calendar."
+          );
+          return;
+        }
         if (!res.ok) {
           setError(data.error || "No se pudo agendar");
           return;

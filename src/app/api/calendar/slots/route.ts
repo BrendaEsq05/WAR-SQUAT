@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { connection, NextRequest, NextResponse } from "next/server";
 import {
   CONSULTATION_TYPES,
   type ConsultationTypeId,
@@ -6,6 +6,8 @@ import {
 import { getAvailableSlots } from "@/lib/calendar/slots";
 
 export async function GET(request: NextRequest) {
+  await connection();
+
   const typeParam = request.nextUrl.searchParams.get("type") as
     | ConsultationTypeId
     | null;

@@ -1,8 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { connection, NextRequest, NextResponse } from "next/server";
 import { getAppUrl } from "@/lib/calendar/config";
 import { exchangeCode } from "@/lib/calendar/google";
 
 export async function GET(request: NextRequest) {
+  await connection();
+
   const code = request.nextUrl.searchParams.get("code");
   const error = request.nextUrl.searchParams.get("error");
   const base = getAppUrl();
