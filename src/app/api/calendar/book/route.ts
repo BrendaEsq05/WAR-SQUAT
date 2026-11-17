@@ -5,11 +5,9 @@ import { toZonedTime } from "date-fns-tz";
 import {
   BOOKING_TIMEZONE,
   CONSULTATION_TYPES,
-  isGoogleConfigured,
   type ConsultationTypeId,
 } from "@/lib/calendar/config";
-import { createCalendarEvent } from "@/lib/calendar/google";
-import { isCalendarConnected } from "@/lib/calendar/tokens";
+import { WHATSAPP_NUMBER } from "@/lib/contact";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -40,6 +38,30 @@ async function saveLocalBooking(payload: Record<string, unknown>) {
     console.warn("No se pudo guardar booking local:", err);
     return false;
   }
+}
+
+function buildWhatsappUrl(input: {
+  consultationLabel: string;
+  whenLabel: string;
+  name: string;
+  email: string;
+  phone?: string;
+  goal?: string;
+  notes?: string;
+}) {
+  const lines = [
+    "Hola WAR SQUAD, quiero confirmar mi cita:",
+    "",
+    `• Tipo: ${input.consultationLabel}`,
+    `• Fecha y hora: ${input.whenLabel} (Torreón)`,
+    `• Nombre: ${input.name}`,
+    `• Correo: ${input.email}`,
+    input.phone ? `• Teléfono: ${input.phone}` : null,
+    input.goal ? `• Objetivo: ${input.goal}` : null,
+    input.notes ? `• Notas: ${input.notes}` : null,
+  ].filter(Boolean);
+
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
 }
 
 export async function POST(request: NextRequest) {
@@ -79,51 +101,6 @@ export async function POST(request: NextRequest) {
     const local = toZonedTime(startDate, BOOKING_TIMEZONE);
     const whenLabel = format(local, "dd/MM/yyyy HH:mm");
 
-    const description = [
-      `Cita WAR SQUAD — ${consultation.label}`,
-      `Cliente: ${name.trim()}`,
-      `Correo: ${email.trim()}`,
-      phone ? `Teléfono: ${phone.trim()}` : null,
-      goal ? `Objetivo: ${goal.trim()}` : null,
-      notes ? `Notas: ${notes.trim()}` : null,
-    ]
-      .filter(Boolean)
-      .join("\n");
-
-    const connected = isGoogleConfigured() && (await isCalendarConnected());
-
-    if (connected) {
-      try {
-        const event = await createCalendarEvent({
-          summary: `WAR SQUAD · ${consultation.label} · ${name.trim()}`,
-          description,
-          start: startDate,
-          end: endDate,
-          attendeeEmail: email.trim(),
-          attendeeName: name.trim(),
-        });
-
-        return NextResponse.json({
-          ok: true,
-          mode: "google",
-          eventId: event.id,
-          htmlLink: event.htmlLink,
-          when: whenLabel,
-          message:
-            "Cita agendada. Se creó el evento en Google Calendar y se envió invitación al correo.",
-        });
-      } catch (err) {
-        console.error(err);
-        return NextResponse.json(
-          {
-            error:
-              "No se pudo crear el evento en Google Calendar. Intenta de nuevo o contacta a WAR SQUAD.",
-          },
-          { status: 502 }
-        );
-      }
-    }
-
     await saveLocalBooking({
       type,
       start: startDate.toISOString(),
@@ -133,15 +110,26 @@ export async function POST(request: NextRequest) {
       phone,
       goal,
       notes,
-      mode: "mock",
+      mode: "whatsapp",
+    });
+
+    const whatsappUrl = buildWhatsappUrl({
+      consultationLabel: consultation.label,
+      whenLabel,
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone?.trim(),
+      goal: goal?.trim(),
+      notes: notes?.trim(),
     });
 
     return NextResponse.json({
       ok: true,
-      mode: "mock",
+      mode: "whatsapp",
       when: whenLabel,
+      whatsappUrl,
       message:
-        "Cita registrada. Falta conectar Google Calendar en /admin/calendario para que las citas lleguen al calendario de WAR SQUAD.",
+        "Horario apartado. Confírmalo por WhatsApp para que WAR SQUAD lo reserve.",
     });
   } catch (err) {
     console.error(err);

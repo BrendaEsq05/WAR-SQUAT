@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 import { CheckCircle2, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 type Slot = { start: string; end: string; label: string };
 
 type SlotsResponse = {
-  mode: "google" | "mock";
+  mode: "google" | "mock" | "whatsapp";
   timezone: string;
   slots: Slot[];
   message?: string;
@@ -30,6 +30,7 @@ type BookResponse = {
   mode?: string;
   when?: string;
   message?: string;
+  whatsappUrl?: string;
   htmlLink?: string;
   error?: string;
 };
@@ -159,26 +160,29 @@ export function BookingForm() {
       <div className="rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
         <CheckCircle2 className="mx-auto size-12 text-primary" />
         <h2 className="mt-4 font-heading text-2xl font-bold text-moss-deep">
-          Cita confirmada
+          Horario apartado
         </h2>
         <p className="mt-2 text-muted-foreground">{result.message}</p>
         {result.when && (
           <p className="mt-4 font-heading text-lg font-semibold text-primary">
-            {result.when} · America/Mexico_City
+            {result.when} · Torreón
           </p>
         )}
-        {result.htmlLink && (
+        {result.whatsappUrl && (
           <a
-            href={result.htmlLink}
+            href={result.whatsappUrl}
             target="_blank"
-            rel="noreferrer"
-            className="mt-4 inline-block text-sm text-primary underline"
+            rel="noopener noreferrer"
+            className={cn(
+              buttonVariants({ size: "lg" }),
+              "mt-8 inline-flex h-12 bg-[#25D366] px-6 text-base font-semibold text-white hover:bg-[#1ebe57]"
+            )}
           >
-            Ver en Google Calendar
+            Confirmar por WhatsApp
           </a>
         )}
         <Button
-          className="mt-8"
+          className="mt-4"
           variant="outline"
           onClick={() => {
             setResult(null);
@@ -375,7 +379,7 @@ export function BookingForm() {
             Agendando…
           </>
         ) : (
-          "Confirmar cita"
+          "Apartar cita"
         )}
       </Button>
     </form>
